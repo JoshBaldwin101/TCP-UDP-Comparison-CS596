@@ -2,21 +2,32 @@
 public class Receiver {
 	public Sender sender;
 	public int packetsToBeReceived;
+	public int errorCount;
+	public int packetsReceived;
+	public DataPacket[] dataPacketsCollected;
 	
 	Receiver()
 	{
 		sender = null;
 		packetsToBeReceived = 100;
+		errorCount = 0;
+		packetsReceived = 0;
+		dataPacketsCollected = new DataPacket[packetsToBeReceived];
 	}
 	
 	Receiver(Sender snd, int packets)
 	{
 		sender = snd;
 		packetsToBeReceived = packets;
+		errorCount = 0;
+		packetsReceived = 0;
+		dataPacketsCollected = new DataPacket[packetsToBeReceived];
 	}
 
 	public void beginHandshakeProcess() {
 		if (initiateHandshake(sender, this)) {
+			errorCount = 0;
+			packetsReceived = 0;
 			System.out.println("Handshake between Sender and Receiver complete.");
 
 		} else {
@@ -32,19 +43,21 @@ public class Receiver {
 		}
 	}
 
-	public void collectPacket(DataPacket dp) {
+	public void collectPacketTCP(DataPacket dp) {
 		if (checkForError(dp))
 		{
-			// You left off here
+			fixError(dp);
+			collectPacketTCP(dp);
 		}
 		else
 		{
-			fixError(dp);
-			collectPacket(dp);
+			dataPacketsCollected[packetsReceived] = dp;
+			packetsReceived++;
 		}
 	}
 	
-	private DataPacket fixError(DataPacket dp) {
+	private DataPacket fixError(DataPacket dp) { // This is essentially checkSum in TCP
+		this.errorCount++;
 		if(dp.getData().equals("Out of order"))
 		{
 			// Packet is out of order. Fix it.
@@ -65,6 +78,7 @@ public class Receiver {
 			// Packet was corrupted. Fix it.
 			dp = sender.retransmitPacket(dp);
 		}
+		System.out.println(dp.getHeader() + " has been fixed.");
 		return dp;
 	}
 

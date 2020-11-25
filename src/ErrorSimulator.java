@@ -13,14 +13,14 @@ public class ErrorSimulator {
 		errorChance = error;
 	}
 	
-	public void deliverPacketToReceiver(DataPacket dp, Receiver receiver)
+	public void deliverPacketToReceiverTCP(DataPacket dp, Receiver receiver)
 	{
 		if (isThereError())
 		{
 			dp = inflictError(dp);
 		}
 		
-		receiver.collectPacket(dp);
+		receiver.collectPacketTCP(dp);
 	}
 
 	public void deliverPacketToSender(DataPacket dp)
