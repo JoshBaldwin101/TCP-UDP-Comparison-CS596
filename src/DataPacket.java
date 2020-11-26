@@ -47,13 +47,13 @@ public class DataPacket {
 
 	private int generatePacketNumber() {
 		Random rollPacketNumber = new Random();
-		return rollPacketNumber.nextInt(6000000);
+		return (rollPacketNumber.nextInt(9000000) + 200000 );
 	}
 
 	// We should have a 1/1000 chance that ONE of the following methods happens
 	public void simulateDataLoss() {
 		// Simulate data loss
-		data = null;
+		data = "Empty";
 	}
 
 	public void simulateIncorrectOrder() {

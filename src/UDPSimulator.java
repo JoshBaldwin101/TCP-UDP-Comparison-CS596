@@ -1,19 +1,22 @@
-public class TCPSimulator {
+
+public class UDPSimulator {
 	private int packetsToBeSent;
-
-	TCPSimulator() {
+	
+	UDPSimulator()
+	{
 		packetsToBeSent = 10;
-		
 	}
-
-	TCPSimulator(int packets) {
+	
+	UDPSimulator(int packets)
+	{
 		packetsToBeSent = packets;
 	}
-
+	
 	public void Begin() {
 		Sender sender1 = new Sender();
 		Receiver rc = new Receiver(sender1, packetsToBeSent);
+		sender1.setReceiver(rc);
 		
-		rc.beginHandshakeProcess();
+		rc.beginUDP(sender1);
 	}
 }

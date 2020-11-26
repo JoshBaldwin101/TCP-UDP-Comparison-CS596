@@ -58,31 +58,30 @@ import java.io.*;
 
 public class TCP_UDP_Simulator
 {
-    public int errorChance = 1000;  // (1 / errorChance) chance of hitting an error
 
     public static void main(String[]args) throws IOException
     {
+    	int packetsToBeSent = 10000000;
     	
-    }
-
-    public boolean isThereError()
-    {
-        // This method will be called for each character. 
-        // Use the public double at the top of this class "pctOfError" which contains the error rate. This var should determine if there's an error or not. 
-        // Returns true if 1/1000 chance happens. 
-        // Returns false 999/1000 times. 
-
-        int errorNum = 420;         // If the random number is this, than there is an error
-
-        Random rollForError = new Random();  
-        int randNum = rollForError.nextInt(errorChance);        // generates 0 - 999
-        
-        if (randNum == errorNum)
-        {
-            System.out.print("Error number " + errorNum + " was rolled and an error occured");
-            return true;
-        }
-        return false;
+    	// TCP Start
+    	// Timer start
+    	long startTime = System.currentTimeMillis();
+    	TCPSimulator tcps = new TCPSimulator(packetsToBeSent); // 10 million packets take 2736 ms 
+    	tcps.Begin();
+    	long TCPTime = System.currentTimeMillis() - startTime;
+    	// Timer stop
+    	// TCP Done
+    	
+    	// UDP Start
+    	startTime = System.currentTimeMillis();
+    	UDPSimulator udps = new UDPSimulator(packetsToBeSent);
+    	udps.Begin();
+    	long UDPTime = System.currentTimeMillis() - startTime;
+    	// UDP calls
+    	
+    	System.out.println("--------------------------------------------");
+    	System.out.println("TCP took " + TCPTime + " milliseconds.");
+    	System.out.println("UDP took " + UDPTime + " milliseconds.");
     }
 }
     

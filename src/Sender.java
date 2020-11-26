@@ -2,10 +2,16 @@
 public class Sender {
 	private Receiver rc;
 	private boolean handshakeEstablished;
+	private int errorChance = 1000;
 
 	public Sender() {
 		handshakeEstablished = false;
 		rc = null;
+	}
+	
+	public void setReceiver(Receiver receiver)
+	{
+		rc = receiver;
 	}
 
 	public boolean handshake(Receiver receiver) {
@@ -29,20 +35,32 @@ public class Sender {
 	}
 
 	public DataPacket sendACK() {
-		if (handshakeEstablished)
-		{
+		if (handshakeEstablished) {
 			DataPacket ACK = new DataPacket("ACK", "data", 0);
 			return ACK;
-		}
-		else
-		{
+		} else {
 			return null;
 		}
 	}
+
+	public void sendDataTCP() {
+		DataPacket dp;
+		ErrorSimulator es = new ErrorSimulator(errorChance);
+		for (int i = 0; i < rc.getPacketsToBeReceived(); i++) {
+			dp = new DataPacket();
+			es.deliverPacketToReceiverTCP(dp, rc);
+		}
+	}
 	
-	public void sendDataTCP()
+	public void sendDataUDP()
 	{
-		
+		DataPacket dp;
+		ErrorSimulator es = new ErrorSimulator(errorChance);
+		for (int i = 0; i < rc.getPacketsToBeReceived(); i++) {
+			dp = new DataPacket();
+			es.deliverPacketToReceiverUDP(dp, rc);
+			
+		}
 	}
 
 	public DataPacket retransmitPacket(DataPacket dp) {

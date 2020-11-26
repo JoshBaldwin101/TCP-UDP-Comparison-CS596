@@ -23,9 +23,9 @@ public class ErrorSimulator {
 		receiver.collectPacketTCP(dp);
 	}
 
-	public void deliverPacketToSender(DataPacket dp)
+	public void deliverPacketToSender(DataPacket dp, Sender sender)
 	{
-		
+		sender.sendACK();
 	}
 	
 	private DataPacket inflictError(DataPacket dp) {
@@ -45,6 +45,9 @@ public class ErrorSimulator {
         	break;
         case 3:
         	dp.simulatePhantomPackets();
+        default:
+        	dp.simulateCorruptData();
+        	break;
         }
         
 		return dp;
@@ -52,16 +55,24 @@ public class ErrorSimulator {
 	
 	private boolean isThereError()
     {
-        int errorNum = 1;         // If the random number is this, than there is an error
+        int errorNum = 5;         // If the random number is this, than there is an error
 
         Random rollForError = new Random();  
         int randNum = rollForError.nextInt(errorChance);        // generates 0 - 999
         
         if (randNum == errorNum)
         {
-            System.out.print("Error number " + errorNum + " was rolled and an error occured");
             return true;
         }
         return false;
     }
+
+	public void deliverPacketToReceiverUDP(DataPacket dp, Receiver rc) {
+		if (isThereError())
+		{
+			dp = inflictError(dp);
+		}
+		
+		rc.collectPacketUDP(dp);
+	}
 }

@@ -23,12 +23,18 @@ public class Receiver {
 		packetsReceived = 0;
 		dataPacketsCollected = new DataPacket[packetsToBeReceived];
 	}
+	
+	public int getPacketsToBeReceived()
+	{
+		return packetsToBeReceived;
+	}
 
 	public void beginHandshakeProcess() {
 		if (initiateHandshake(sender, this)) {
 			errorCount = 0;
 			packetsReceived = 0;
 			System.out.println("Handshake between Sender and Receiver complete.");
+			sender.sendDataTCP();
 
 		} else {
 			System.out.println("Handshake between Sender and Receiver has FAILED.");
@@ -46,7 +52,7 @@ public class Receiver {
 	public void collectPacketTCP(DataPacket dp) {
 		if (checkForError(dp))
 		{
-			fixError(dp);
+			dp = fixError(dp);
 			collectPacketTCP(dp);
 		}
 		else
@@ -68,7 +74,7 @@ public class Receiver {
 			// Packet is a phantom packet. Fix it.
 			dp = sender.retransmitPacket(dp);
 		}
-		else if (dp.getData() == null)
+		else if (dp.getData() == "Empty")
 		{
 			// Packet was lost. Fix it.
 			dp = sender.retransmitPacket(dp);
@@ -79,16 +85,26 @@ public class Receiver {
 			dp = sender.retransmitPacket(dp);
 		}
 		System.out.println(dp.getHeader() + " has been fixed.");
+		System.out.println("Error count = " + errorCount);
 		return dp;
 	}
 
 	private boolean checkForError(DataPacket dp)
 	{
-		if (dp.getData().equals("Out of order") || dp.getData().equals("Phantom") || dp.getData() == null || dp.getData().equals("Corrupt"))
+		if (dp.getData().equals("Out of order") || dp.getData().equals("Phantom") || dp.getData().equals("Empty") || dp.getData().equals("Corrupt"))
 		{
 			return true;
 		}
 		return false;
+	}
+
+	public void beginUDP(Sender send) {
+		send.sendDataUDP();
+	}
+
+	public void collectPacketUDP(DataPacket dp) {
+		dataPacketsCollected[packetsReceived] = dp;
+		packetsReceived++;
 	}
 
 }
