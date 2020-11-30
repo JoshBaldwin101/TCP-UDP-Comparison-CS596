@@ -74,7 +74,7 @@ public class TCP_UDP_Simulator
     	
     	// UDP Start
     	startTime = System.currentTimeMillis();
-    	UDPSimulator udps = new UDPSimulator(packetsToBeSent);
+    	UDPSimulator udps = new UDPSimulator(packetsToBeSent/3);
     	udps.Begin();
     	long UDPTime = System.currentTimeMillis() - startTime;
     	// UDP calls

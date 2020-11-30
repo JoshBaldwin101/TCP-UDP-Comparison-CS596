@@ -68,10 +68,12 @@ public class ErrorSimulator {
     }
 
 	public void deliverPacketToReceiverUDP(DataPacket dp, Receiver rc) {
+		/*
 		if (isThereError())
 		{
 			dp = inflictError(dp);
 		}
+		*/
 		
 		rc.collectPacketUDP(dp);
 	}

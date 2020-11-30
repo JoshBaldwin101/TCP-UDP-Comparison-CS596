@@ -2,7 +2,7 @@
 public class Sender {
 	private Receiver rc;
 	private boolean handshakeEstablished;
-	private int errorChance = 1000;
+	private int errorChance = 50;
 
 	public Sender() {
 		handshakeEstablished = false;
