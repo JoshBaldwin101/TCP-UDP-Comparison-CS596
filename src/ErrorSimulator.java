@@ -5,7 +5,7 @@ public class ErrorSimulator {
 	
 	ErrorSimulator()
 	{
-		errorChance = 1000;
+		errorChance = 3;
 	}
 	
 	ErrorSimulator(int error)
@@ -55,7 +55,7 @@ public class ErrorSimulator {
 	
 	private boolean isThereError()
     {
-        int errorNum = 5;         // If the random number is this, than there is an error
+        int errorNum = 2;         // If the random number is this, than there is an error
 
         Random rollForError = new Random();  
         int randNum = rollForError.nextInt(errorChance);        // generates 0 - 999

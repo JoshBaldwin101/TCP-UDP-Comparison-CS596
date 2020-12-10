@@ -2,7 +2,7 @@
 public class Sender {
 	private Receiver rc;
 	private boolean handshakeEstablished;
-	private int errorChance = 50;
+	private int errorChance = 33;
 
 	public Sender() {
 		handshakeEstablished = false;
@@ -44,6 +44,7 @@ public class Sender {
 	}
 
 	public void sendDataTCP() {
+		//this.simulatePing(1);
 		DataPacket dp;
 		ErrorSimulator es = new ErrorSimulator(errorChance);
 		for (int i = 0; i < rc.getPacketsToBeReceived(); i++) {
@@ -66,6 +67,14 @@ public class Sender {
 	public DataPacket retransmitPacket(DataPacket dp) {
 		DataPacket dp2 = new DataPacket();
 		return dp2;
+	}
+	
+	public void simulatePing(long timeInMilliSeconds) {	
+	    long timestamp = System.currentTimeMillis();
+
+	    do {
+	    } while (System.currentTimeMillis() < timestamp + timeInMilliSeconds);
+
 	}
 
 }

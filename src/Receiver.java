@@ -84,7 +84,7 @@ public class Receiver {
 			// Packet was corrupted. Fix it.
 			dp = sender.retransmitPacket(dp);
 		}
-		System.out.println(dp.getHeader() + " has been fixed.");
+		//System.out.println(dp.getHeader() + " has been fixed.");
 		System.out.println("Error count = " + errorCount);
 		return dp;
 	}
